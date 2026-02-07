@@ -1,0 +1,33 @@
+:root {
+  --size: 200px;
+  --heart-color: #ff0000;
+}
+
+.heart {
+  position: relative;
+  height: var(--size);
+  aspect-ratio: 1;
+  background-color: var(--heart-color);
+  rotate: 45deg;
+  transition: all 0.3s ease-in;
+}
+
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  border-radius: 100vw;
+  aspect-ratio: 1;
+  height: var(--size);
+  background-color: inherit;
+  inset: 0;
+  translate: calc(var(--size) / -2) 0;
+}
+
+.heart::after {
+  translate: 0 calc(var(--size) / -2);
+}
+
+.heart:hover {
+  scale: 1.2;
+}
