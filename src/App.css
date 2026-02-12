@@ -5,3 +5,11 @@
   height: 100dvh;
   text-align: center;
 }
+
+.emoji-container {
+  /* background-color: forestgreen;
+  opacity: 0.5; */
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}

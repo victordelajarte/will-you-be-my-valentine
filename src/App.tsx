@@ -13,7 +13,30 @@ interface EmojiInterface {
 }
 
 function App() {
-  const [emojis, _setEmojis] = createSignal<EmojiInterface[]>([]);
+  const [emojis, setEmojis] = createSignal<EmojiInterface[]>([]);
+
+  setInterval(() => {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    const horizontalMargin = 0.2;
+    const verticalMargin = 0.2;
+    const x =
+      Math.random() * windowWidth * (1 - horizontalMargin * 2) +
+      windowWidth * horizontalMargin;
+    const y =
+      Math.random() * windowHeight * (1 - verticalMargin * 2) +
+      windowHeight * verticalMargin;
+    const newEmoji: EmojiInterface = {
+      id: Math.random(),
+      x,
+      y,
+      emoji: allowedEmojis[Math.floor(Math.random() * allowedEmojis.length)],
+    };
+
+    // We add the new emoji, but we also remove the ones that fell under the screen
+    setEmojis((prev) => [...prev, newEmoji].filter((e) => e.y > 0));
+  }, 1_000);
 
   return (
     <>
@@ -21,17 +44,21 @@ function App() {
 
       <Heart />
 
-      {emojis().map((emoji) => (
-        <div
-          class="emoji"
-          style={{
-            left: `${emoji.x}px`,
-            top: `${emoji.y}px`,
-          }}
-        >
-          {emoji.emoji}
-        </div>
-      ))}
+      <div class="emoji-container">
+        {emojis().map((emoji) => (
+          <div
+            class="emoji"
+            style={{
+              position: 'absolute',
+              'font-size': '2rem',
+              left: `${emoji.x}px`,
+              top: `${emoji.y}px`,
+            }}
+          >
+            {emoji.emoji}
+          </div>
+        ))}
+      </div>
     </>
   );
 }
