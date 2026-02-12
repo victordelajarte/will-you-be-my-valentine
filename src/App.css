@@ -13,3 +13,14 @@
   inset: 0;
   overflow: hidden;
 }
+
+.emoji {
+  position: absolute;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 100vw;
+  aspect-ratio: 1;
+  left: attr(data-x px);
+  top: attr(data-y px);
+}

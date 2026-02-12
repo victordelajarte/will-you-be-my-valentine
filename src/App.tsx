@@ -50,12 +50,11 @@ function App() {
         {emojis().map((emoji) => (
           <div
             class="emoji"
-            style={{
-              position: 'absolute',
-              'font-size': '2rem',
-              left: `${emoji.x}px`,
-              top: `${emoji.y}px`,
-            }}
+            data-x={emoji.x}
+            data-y={emoji.y}
+            on:click={() =>
+              setEmojis([...emojis().filter((e) => e.id !== emoji.id)])
+            }
           >
             {emoji.emoji}
           </div>
