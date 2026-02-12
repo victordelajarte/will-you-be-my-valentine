@@ -9,6 +9,7 @@ interface EmojiInterface {
   id: number;
   x: number;
   y: number;
+  vy: number;
   emoji: (typeof allowedEmojis)[number];
 }
 
@@ -31,6 +32,7 @@ function App() {
       id: Math.random(),
       x,
       y,
+      vy: Math.random() * 50,
       emoji: allowedEmojis[Math.floor(Math.random() * allowedEmojis.length)],
     };
 
