@@ -2,12 +2,16 @@ import { For } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 import './App.css';
 import Heart from './components/heart';
-import Emoji, { allowedEmojis, type EmojiInterface } from './components/emoji';
+import Emoji, {
+  allowedEmojis,
+  badEmojis,
+  type EmojiInterface,
+} from './components/emoji';
 
 function App() {
   const [emojis, setEmojis] = createStore<EmojiInterface[]>([]);
 
-  setInterval(() => {
+  const creationInterval = setInterval(() => {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
 
@@ -29,10 +33,21 @@ function App() {
       emoji: allowedEmojis[Math.floor(Math.random() * allowedEmojis.length)],
     };
 
+    const fallenBadEmoji = emojis.find(
+      (e) =>
+        e.y > windowHeight &&
+        (badEmojis as unknown as typeof allowedEmojis).includes(e.emoji),
+    );
+
+    if (fallenBadEmoji) {
+      gameOver(fallenBadEmoji);
+      return;
+    }
+
     setEmojis([...emojis.filter((e) => e.y > 0), newEmoji]);
   }, 1_000);
 
-  setInterval(() => {
+  const movementInterval = setInterval(() => {
     setEmojis(
       produce((emojis) => {
         for (const emoji of emojis) {
@@ -41,6 +56,13 @@ function App() {
       }),
     );
   }, 10);
+
+  const gameOver = (emoji: EmojiInterface) => {
+    alert(`Game Over! ${emoji.emoji}`);
+    clearInterval(creationInterval);
+    clearInterval(movementInterval);
+    setEmojis([]);
+  };
 
   return (
     <>

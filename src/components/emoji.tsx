@@ -1,5 +1,5 @@
 const goodEmojis = ['❤️', '💔', '💕', '💖', '💝', '😍', '🥰', '😘'] as const;
-const badEmojis = ['😬', '💩', '🤡'] as const;
+export const badEmojis = ['😬', '💩', '🤡'] as const;
 export const allowedEmojis = [...goodEmojis, ...badEmojis] as const;
 
 export interface EmojiInterface {
