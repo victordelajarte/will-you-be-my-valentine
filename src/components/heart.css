@@ -10,7 +10,7 @@
   background-color: var(--heart-color);
   rotate: 45deg;
   transition: all 0.3s ease-in;
-  margin: 25% auto;
+  margin: 25vh auto;
 }
 
 .heart::before,
