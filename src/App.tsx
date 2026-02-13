@@ -77,6 +77,7 @@ function App() {
               emoji={emoji}
               onClick={() => {
                 setEmojis((prev) => prev.filter((e) => e.id !== emoji.id));
+                // TODO: fade the emoji
               }}
             />
           )}
