@@ -1,4 +1,5 @@
-import { createSignal } from 'solid-js';
+import { For } from 'solid-js';
+import { createStore, produce } from 'solid-js/store';
 import './App.css';
 import Heart from './components/heart';
 
@@ -9,12 +10,14 @@ interface EmojiInterface {
   id: number;
   x: number;
   y: number;
+  startX: number;
+  startY: number;
   vy: number;
   emoji: (typeof allowedEmojis)[number];
 }
 
 function App() {
-  const [emojis, setEmojis] = createSignal<EmojiInterface[]>([]);
+  const [emojis, setEmojis] = createStore<EmojiInterface[]>([]);
 
   setInterval(() => {
     const windowWidth = window.innerWidth;
@@ -30,15 +33,26 @@ function App() {
       windowHeight * verticalMargin;
     const newEmoji: EmojiInterface = {
       id: Math.random(),
+      startX: x,
+      startY: y,
       x,
       y,
-      vy: Math.random() * 50,
+      vy: Math.random() * 0.5 + 0.5,
       emoji: allowedEmojis[Math.floor(Math.random() * allowedEmojis.length)],
     };
 
-    // We add the new emoji, but we also remove the ones that fell under the screen
-    setEmojis((prev) => [...prev, newEmoji].filter((e) => e.y > 0));
+    setEmojis([...emojis.filter((e) => e.y > 0), newEmoji]);
   }, 1_000);
+
+  setInterval(() => {
+    setEmojis(
+      produce((emojis) => {
+        for (const emoji of emojis) {
+          emoji.y += emoji.vy;
+        }
+      }),
+    );
+  }, 10);
 
   return (
     <>
@@ -47,18 +61,20 @@ function App() {
       <Heart />
 
       <div class="emoji-container">
-        {emojis().map((emoji) => (
-          <div
-            class="emoji"
-            data-x={emoji.x}
-            data-y={emoji.y}
-            on:click={() =>
-              setEmojis([...emojis().filter((e) => e.id !== emoji.id)])
-            }
-          >
-            {emoji.emoji}
-          </div>
-        ))}
+        <For each={emojis}>
+          {(emoji) => (
+            <div
+              class="emoji"
+              data-x={emoji.x}
+              data-y={emoji.y}
+              on:click={() => {
+                setEmojis((prev) => prev.filter((e) => e.id !== emoji.id));
+              }}
+            >
+              {emoji.emoji}
+            </div>
+          )}
+        </For>
       </div>
     </>
   );
