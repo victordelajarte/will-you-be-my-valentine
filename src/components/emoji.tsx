@@ -21,8 +21,7 @@ export default function Emoji(props: EmojiProps) {
   return (
     <div
       class="emoji"
-      data-x={props.emoji.x}
-      data-y={props.emoji.y}
+      style={{ left: `${props.emoji.x}px`, top: `${props.emoji.y}px` }}
       on:click={props.onClick}
     >
       {props.emoji.emoji}
