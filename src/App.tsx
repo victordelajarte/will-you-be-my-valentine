@@ -2,19 +2,7 @@ import { For } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 import './App.css';
 import Heart from './components/heart';
-
-const goodEmojis = ['❤️', '💔', '💕', '💖', '💝', '😍', '🥰', '😘'] as const;
-const badEmojis = ['😬', '💩', '🤡'] as const;
-const allowedEmojis = [...goodEmojis, ...badEmojis] as const;
-interface EmojiInterface {
-  id: number;
-  x: number;
-  y: number;
-  startX: number;
-  startY: number;
-  vy: number;
-  emoji: (typeof allowedEmojis)[number];
-}
+import Emoji, { allowedEmojis, type EmojiInterface } from './components/emoji';
 
 function App() {
   const [emojis, setEmojis] = createStore<EmojiInterface[]>([]);
@@ -63,16 +51,12 @@ function App() {
       <div class="emoji-container">
         <For each={emojis}>
           {(emoji) => (
-            <div
-              class="emoji"
-              data-x={emoji.x}
-              data-y={emoji.y}
-              on:click={() => {
+            <Emoji
+              emoji={emoji}
+              onClick={() => {
                 setEmojis((prev) => prev.filter((e) => e.id !== emoji.id));
               }}
-            >
-              {emoji.emoji}
-            </div>
+            />
           )}
         </For>
       </div>
